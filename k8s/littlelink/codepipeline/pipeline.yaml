@@ -12,6 +12,7 @@ phases:
       - mv terraform /usr/bin/
   build:
     commands:
+      - cd k8s/littlelink/terraform/
       - terraform init  # Sets up S3 backend and DynamoDB lock
       - terraform fmt -check
       - terraform validate
