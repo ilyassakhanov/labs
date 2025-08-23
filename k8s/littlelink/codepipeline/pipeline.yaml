@@ -6,9 +6,9 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
-      - export TERRAFORM_VERSION=1.13.0
+      - TERRAFORM_VERSION=1.13.0
       - wget https://releases.hashicorp.com/terraform/1.13.0/terraform_1.13.0_linux_amd64.zip
-      - unzip terraform_\${TERRAFORM_VERSION}_linux_amd64.zip
+      - unzip terraform_1.13.0_linux_amd64.zip
       - mv terraform /usr/bin/
   build:
     commands:
