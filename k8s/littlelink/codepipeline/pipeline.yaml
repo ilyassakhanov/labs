@@ -1,5 +1,4 @@
 # Buildspec file: buildspec.yaml (save this locally)
-cat <<EOF > buildspec.yaml
 version: 0.2
 
 phases:
@@ -18,12 +17,3 @@ phases:
       - terraform validate
       - terraform plan -out=plan.tfout
       - terraform apply -auto-approve plan.tfout
-EOF
-
-# Create project (uses the buildspec inline for simplicity; you can upload it to S3 if preferred)
-aws codebuild create-project --name terraform-build-project \
-  --source type=CODEPIPELINE \
-  --artifacts type=CODEPIPELINE \
-  --environment type=LINUX_CONTAINER,computeType=BUILD_GENERAL1_SMALL,image=aws/codebuild/standard:7.0 \
-  --service-role arn:aws:iam::$(aws sts get-caller-identity --query Account --output text):role/codebuild-terraform-role \
-  --region eu-central-1
