@@ -1,0 +1,29 @@
+# Buildspec file: buildspec.yaml (save this locally)
+cat <<EOF > buildspec.yaml
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - TERRAFORM_VERSION=1.9.4
+      - wget https://releases.hashicorp.com/terraform/\${TERRAFORM_VERSION}/terraform_\${TERRAFORM_VERSION}_linux_amd64.zip
+      - unzip terraform_\${TERRAFORM_VERSION}_linux_amd64.zip
+      - mv terraform /usr/bin/
+  build:
+    commands:
+      - terraform init  # Sets up S3 backend and DynamoDB lock
+      - terraform fmt -check
+      - terraform validate
+      - terraform plan -out=plan.tfout
+      - terraform apply -auto-approve plan.tfout
+EOF
+
+# Create project (uses the buildspec inline for simplicity; you can upload it to S3 if preferred)
+aws codebuild create-project --name terraform-build-project \
+  --source type=CODEPIPELINE \
+  --artifacts type=CODEPIPELINE \
+  --environment type=LINUX_CONTAINER,computeType=BUILD_GENERAL1_SMALL,image=aws/codebuild/standard:7.0 \
+  --service-role arn:aws:iam::$(aws sts get-caller-identity --query Account --output text):role/codebuild-terraform-role \
+  --region eu-central-1
