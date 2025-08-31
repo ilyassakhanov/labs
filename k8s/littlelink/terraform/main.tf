@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "terraform_state" {
     prevent_destroy = true
   }
   tags = {
-    Name        = "states bucket my stuff ;)"
+    Name        = "states bucket my stuff"
     Environment = "Dev"
   }
 }
