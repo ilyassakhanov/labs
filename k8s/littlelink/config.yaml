@@ -12,7 +12,7 @@ metadata:
     helm.sh/chart: littlelink-server-1.4.2
   annotations:
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
   - port: 3000
     targetPort: http
@@ -59,27 +59,27 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: AVATAR_2X_URL
-              value: https://pbs.twimg.com/profile_images/1286144221217316864/qIAsKOpB_400x400.jpg
+              value: https://media.licdn.com/dms/image/v2/D4D03AQGx0EZpmNP1sA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1731778298983?e=1756339200&v=beta&t=lbGtsJITCvWYF264DLe85UlZpDr6vjpmWDqcJfvleuM
             - name: AVATAR_ALT
-              value: Techno Tim Profile Pic
+              value: Ilyas Sakhanov Profile Pic
             - name: AVATAR_URL
-              value: https://pbs.twimg.com/profile_images/1286144221217316864/qIAsKOpB_200x200.jpg
+              value: https://media.licdn.com/dms/image/v2/D4D03AQGx0EZpmNP1sA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1731778298983?e=1756339200&v=beta&t=lbGtsJITCvWYF264DLe85UlZpDr6vjpmWDqcJfvleuM
             - name: BIO
               value: Hey! Just a place where you can connect with me!
             - name: FAVICON_URL
-              value: https://pbs.twimg.com/profile_images/1286144221217316864/qIAsKOpB_200x200.jpg
+              value: https://media.licdn.com/dms/image/v2/D4D03AQGx0EZpmNP1sA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1731778298983?e=1756339200&v=beta&t=lbGtsJITCvWYF264DLe85UlZpDr6vjpmWDqcJfvleuM
             - name: FOOTER
               value: Thanks for stopping by!
             - name: GITHUB
-              value: https://github.com/timothystewart6
+              value:  https://github.com/ilyassakhanov
             - name: META_AUTHOR
-              value: Techno Tim
+              value: Ilyas Sakhanov
             - name: META_DESCRIPTION
-              value: Techno Tim Link page
+              value: Ilyas Sakhanov Link page
             - name: META_TITLE
-              value: Techno Tim
+              value: Ilyas Sakhanov
             - name: NAME
-              value: TechnoTim
+              value: Ilyas Sakhanov
             - name: THEME
               value: Dark
             - name: TZ
