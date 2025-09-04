@@ -99,6 +99,22 @@ module "eks" {
     Environment = "development"
     Project     = "my-eks-project"
   }
+  access_entries = {
+    my_admin_role = {
+      kubernetes_groups = []
+      principal_arn     = "arn:aws:iam::247487031771:user/adminuser" # Or user ARN
+
+      policy_associations = {
+        my_admin_role = {
+          policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          principal_arn = "arn:aws:iam::247487031771:user/adminuser"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+  }
 }
 
 # --- Outputs ---
@@ -113,7 +129,7 @@ output "cluster_name" {
   value       = module.eks.cluster_name
 }
 
-output "kubeconfig_command" {
-  description = "Command to configure kubectl."
-  value       = "aws eks update-kubeconfig --region ${var.region} --name ${module.eks.cluster_name}"
-}
+# output "kubeconfig_command" {
+#   description = "Command to configure kubectl."
+#   value       = "aws eks update-kubeconfig --region ${var.region} --name ${module.eks.cluster_name}"
+# }
