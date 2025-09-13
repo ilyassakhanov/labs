@@ -1,0 +1,20 @@
+# Buildspec file: buildspec.yaml (save this locally)
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - TERRAFORM_VERSION=1.13.0
+      - wget https://releases.hashicorp.com/terraform/1.13.0/terraform_1.13.0_linux_amd64.zip
+      - unzip terraform_1.13.0_linux_amd64.zip
+      - mv terraform /usr/bin/
+  build:
+    commands:
+      - cd k8s/littlelink/terraform/
+      - terraform init  # Sets up S3 backend and DynamoDB lock
+      - terraform fmt -check
+      - terraform validate
+      - terraform plan -out=plan.tfout
+      - terraform apply -auto-approve plan.tfout
