@@ -62,12 +62,12 @@ env:
 # @default -- See values.yaml
 service:
   main:
+    type: LoadBalancer
     ports:
       http:
-        port: 3000
+        port: 80
+        targetPort: 3000
 
 ingress:
-  # -- Enable and configure ingress settings for the chart under this key.
-  # @default -- See values.yaml
   main:
-    enabled: true
+    enabled: false

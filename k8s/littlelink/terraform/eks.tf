@@ -59,8 +59,8 @@ module "eks" {
   cluster_endpoint_public_access = true
 
 
-  vpc_id     = aws_default_vpc.default.id
-  subnet_ids = [aws_default_subnet.public_subnet1.id, aws_default_subnet.public_subnet2.id, aws_default_subnet.public_subnet3.id]
+  vpc_id     = data.aws_vpc.default.id
+  subnet_ids = [data.aws_subnet.public_subnet1.id, data.aws_subnet.public_subnet2.id, data.aws_subnet.public_subnet3.id]
 
   # --- Managed Node Group for EC2 instances ---
   eks_managed_node_groups = {

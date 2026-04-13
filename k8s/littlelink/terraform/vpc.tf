@@ -1,94 +1,40 @@
-resource "aws_default_vpc" "default" {
-  tags = {
-    Name = "default"
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
+data "aws_vpc" "default" {
+  default = true
 }
 
-
-
-resource "aws_default_subnet" "public_subnet1" {
-  availability_zone       = "eu-central-1b"
-  map_public_ip_on_launch = true
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  tags = {
-    Name = "subnet1"
-  }
+data "aws_subnet" "public_subnet1" {
+  availability_zone = "eu-central-1b"
+  default_for_az    = true
 }
 
-
-
-resource "aws_default_subnet" "public_subnet2" {
-  availability_zone       = "eu-central-1a"
-  map_public_ip_on_launch = true
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  tags = {
-    Name = "subnet2"
-  }
+data "aws_subnet" "public_subnet2" {
+  availability_zone = "eu-central-1a"
+  default_for_az    = true
 }
 
-
-
-resource "aws_default_subnet" "public_subnet3" {
-  availability_zone       = "eu-central-1c"
-  map_public_ip_on_launch = true
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  tags = {
-    Name = "subnet3"
-  }
+data "aws_subnet" "public_subnet3" {
+  availability_zone = "eu-central-1c"
+  default_for_az    = true
 }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_default_vpc.default.id
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  tags = {
-    Name = "main"
-  }
+locals {
+  public_subnet_ids = [
+    data.aws_subnet.public_subnet1.id,
+    data.aws_subnet.public_subnet2.id,
+    data.aws_subnet.public_subnet3.id,
+  ]
 }
 
-resource "aws_route_table" "route_table" {
-  vpc_id = aws_default_vpc.default.id
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
-  }
+resource "aws_ec2_tag" "subnet_elb" {
+  for_each    = toset(local.public_subnet_ids)
+  resource_id = each.value
+  key         = "kubernetes.io/role/elb"
+  value       = "1"
 }
 
-resource "aws_route_table_association" "subnet1_route" {
-  subnet_id      = aws_default_subnet.public_subnet1.id
-  route_table_id = aws_route_table.route_table.id
-}
-
-resource "aws_route_table_association" "subnet2_route" {
-  subnet_id      = aws_default_subnet.public_subnet2.id
-  route_table_id = aws_route_table.route_table.id
-}
-
-resource "aws_route_table_association" "subnet3_route" {
-  subnet_id      = aws_default_subnet.public_subnet3.id
-  route_table_id = aws_route_table.route_table.id
+resource "aws_ec2_tag" "subnet_cluster" {
+  for_each    = toset(local.public_subnet_ids)
+  resource_id = each.value
+  key         = "kubernetes.io/cluster/littlelink"
+  value       = "shared"
 }
