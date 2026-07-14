@@ -1,0 +1,29 @@
+package fileops
+
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+func GetFloatFromFile(fileName string) (float64, error) {
+	data, err := os.ReadFile(fileName)
+
+	if err != nil {
+		return 1000, errors.New("Failed to find file.")
+	}
+
+	valueText := string(data)
+	value, err := strconv.ParseFloat(valueText, 64)
+
+	if err != nil {
+		return 1000, errors.New("Failed to parse stored balance value")
+	}
+	return value, nil
+}
+
+func WriteFloatToFile(value float64, fileName string) {
+	balanceStr := fmt.Sprint(value)
+	os.WriteFile(fileName, []byte(balanceStr), 0644)
+}
